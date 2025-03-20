@@ -1,6 +1,5 @@
 // Copyright © 2017 VMware, Inc. All Rights Reserved.
 // SPDX-License-Identifier: BSD-2-Clause
-//
 package nfs
 
 import (
@@ -12,8 +11,8 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/vmware/go-nfs-client/nfs/rpc"
-	"github.com/vmware/go-nfs-client/nfs/util"
+	"github.com/liubing0427/go-nfs-client/nfs/rpc"
+	"github.com/liubing0427/go-nfs-client/nfs/util"
 )
 
 const (
@@ -30,6 +29,7 @@ const (
 	NFSProc3Remove      = 12
 	NFSProc3RmDir       = 13
 	NFSProc3ReadDirPlus = 17
+	NFSProc3FSStat      = 18
 	NFSProc3FSInfo      = 19
 	NFSProc3Commit      = 21
 
@@ -217,6 +217,17 @@ type FSInfo struct {
 	Size       uint64
 	TimeDelta  NFS3Time
 	Properties uint32
+}
+
+type FSStat struct {
+	Attr            PostOpAttr
+	TotalBytes      uint64 // 总字节数
+	FreeBytes       uint64 // 可用字节数
+	UserAvailBytes  uint64 // 用户可用字节数
+	TotalInodes     uint64 // 总 Inodes
+	FreeInodes      uint64 // 可用 Inodes
+	UserAvailInodes uint64 // 用户可用 Inodes
+	Invarsec        uint32 // 变化不变时间
 }
 
 // Dial an RPC svc after getting the port from the portmapper

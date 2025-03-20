@@ -1,6 +1,5 @@
 // Copyright © 2017 VMware, Inc. All Rights Reserved.
 // SPDX-License-Identifier: BSD-2-Clause
-//
 package nfs
 
 import (
@@ -10,9 +9,9 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/vmware/go-nfs-client/nfs/rpc"
-	"github.com/vmware/go-nfs-client/nfs/util"
-	"github.com/vmware/go-nfs-client/nfs/xdr"
+	"github.com/liubing0427/go-nfs-client/nfs/rpc"
+	"github.com/liubing0427/go-nfs-client/nfs/util"
+	"github.com/liubing0427/go-nfs-client/nfs/xdr"
 )
 
 type Target struct {
@@ -103,6 +102,37 @@ func (v *Target) FSInfo() (*FSInfo, error) {
 	}
 
 	return fsinfo, nil
+}
+
+func (v *Target) FSStat() (*FSStat, error) {
+	type FSStatArgs struct {
+		rpc.Header
+		FsRoot []byte
+	}
+
+	res, err := v.call(&FSStatArgs{
+		Header: rpc.Header{
+			Rpcvers: 2,
+			Prog:    Nfs3Prog,
+			Vers:    Nfs3Vers,
+			Proc:    NFSProc3FSStat,
+			Cred:    v.auth,
+			Verf:    rpc.AuthNull,
+		},
+		FsRoot: v.fh,
+	})
+
+	if err != nil {
+		util.Debugf("fsroot: %s", err.Error())
+		return nil, err
+	}
+
+	fsstat := new(FSStat)
+	if err = xdr.Read(res, fsstat); err != nil {
+		return nil, err
+	}
+
+	return fsstat, nil
 }
 
 // Lookup returns attributes and the file handle to a given dirent

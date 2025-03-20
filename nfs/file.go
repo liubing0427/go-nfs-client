@@ -1,6 +1,5 @@
 // Copyright © 2017 VMware, Inc. All Rights Reserved.
 // SPDX-License-Identifier: BSD-2-Clause
-//
 package nfs
 
 import (
@@ -8,9 +7,9 @@ import (
 	"io"
 	"os"
 
-	"github.com/vmware/go-nfs-client/nfs/rpc"
-	"github.com/vmware/go-nfs-client/nfs/util"
-	"github.com/vmware/go-nfs-client/nfs/xdr"
+	"github.com/liubing0427/go-nfs-client/nfs/rpc"
+	"github.com/liubing0427/go-nfs-client/nfs/util"
+	"github.com/liubing0427/go-nfs-client/nfs/xdr"
 )
 
 // File wraps the NfsProc3Read and NfsProc3Write methods to implement a
